@@ -142,6 +142,35 @@ Resources:
         Ref: TheVPCIGWFA25CC08
     Metadata:
       aws:cdk:path: Vpc/TheVPC/VPCGW
+  TheVPCVpnGateway97BC18B3:
+    Type: AWS::EC2::VPNGateway
+    Properties:
+      Type: ipsec.1
+      Tags:
+        - Key: Name
+          Value: Vpc/TheVPC
+    Metadata:
+      aws:cdk:path: Vpc/TheVPC/VpnGateway
+  TheVPCVPCVPNGW7C629261:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: TheVPC92636AB0
+      VpnGatewayId:
+        Ref: TheVPCVpnGateway97BC18B3
+    Metadata:
+      aws:cdk:path: Vpc/TheVPC/VPCVPNGW
+  TheVPCRoutePropagation577346C9:
+    Type: AWS::EC2::VPNGatewayRoutePropagation
+    Properties:
+      RouteTableIds:
+        - Ref: TheVPCApplicationSubnet1RouteTable0FE2A3D8
+      VpnGatewayId:
+        Ref: TheVPCVpnGateway97BC18B3
+    DependsOn:
+      - TheVPCVPCVPNGW7C629261
+    Metadata:
+      aws:cdk:path: Vpc/TheVPC/RoutePropagation
   s3vpcendpoint:
     Type: AWS::EC2::VPCEndpoint
     Properties:
@@ -209,19 +238,7 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: "@aws-cdk/assets=0.28.0,@aws-cdk/assets-docker=0.28.0,@aws-cdk/aws-apig\
-        ateway=0.28.0,@aws-cdk/aws-applicationautoscaling=0.28.0,@aws-cdk/aws-a\
-        utoscaling=0.28.0,@aws-cdk/aws-autoscaling-common=0.28.0,@aws-cdk/aws-c\
-        ertificatemanager=0.28.0,@aws-cdk/aws-cloudformation=0.28.0,@aws-cdk/aw\
-        s-cloudwatch=0.28.0,@aws-cdk/aws-codedeploy-api=0.28.0,@aws-cdk/aws-ec2\
-        =0.28.0,@aws-cdk/aws-ecr=0.28.0,@aws-cdk/aws-ecs=0.28.0,@aws-cdk/aws-el\
-        asticloadbalancingv2=0.28.0,@aws-cdk/aws-events=0.28.0,@aws-cdk/aws-iam\
-        =0.28.0,@aws-cdk/aws-kms=0.28.0,@aws-cdk/aws-lambda=0.28.0,@aws-cdk/aws\
-        -logs=0.28.0,@aws-cdk/aws-route53=0.28.0,@aws-cdk/aws-s3=0.28.0,@aws-cd\
-        k/aws-s3-notifications=0.28.0,@aws-cdk/aws-servicediscovery=0.28.0,@aws\
-        -cdk/aws-sns=0.28.0,@aws-cdk/aws-sqs=0.28.0,@aws-cdk/cdk=0.28.0,@aws-cd\
-        k/cx-api=0.28.0,@aws-cdk/region-info=0.28.0,jsii-runtime=node.js/v11.2.\
-        0"
+      Modules: aws-cdk=0.29.0,@aws-cdk/assets=0.28.0,@aws-cdk/assets-docker=0.28.0,@aws-cdk/aws-apigateway=0.28.0,@aws-cdk/aws-applicationautoscaling=0.28.0,@aws-cdk/aws-autoscaling=0.28.0,@aws-cdk/aws-autoscaling-common=0.28.0,@aws-cdk/aws-certificatemanager=0.28.0,@aws-cdk/aws-cloudformation=0.28.0,@aws-cdk/aws-cloudwatch=0.28.0,@aws-cdk/aws-codedeploy-api=0.28.0,@aws-cdk/aws-ec2=0.28.0,@aws-cdk/aws-ecr=0.28.0,@aws-cdk/aws-ecs=0.28.0,@aws-cdk/aws-elasticloadbalancingv2=0.28.0,@aws-cdk/aws-events=0.28.0,@aws-cdk/aws-iam=0.28.0,@aws-cdk/aws-kms=0.28.0,@aws-cdk/aws-lambda=0.28.0,@aws-cdk/aws-logs=0.28.0,@aws-cdk/aws-route53=0.28.0,@aws-cdk/aws-s3=0.28.0,@aws-cdk/aws-s3-notifications=0.28.0,@aws-cdk/aws-servicediscovery=0.28.0,@aws-cdk/aws-sns=0.28.0,@aws-cdk/aws-sqs=0.28.0,@aws-cdk/cdk=0.28.0,@aws-cdk/cx-api=0.28.0,@aws-cdk/region-info=0.28.0,jsii-runtime=node.js/v11.2.0
 Outputs:
   TheVPCPublicSubnetIDs34A93164:
     Value:
@@ -239,5 +256,7 @@ Outputs:
     Export:
       Name: Vpc:TheVPCVpcIdD346CDBA
   TheVPCVpnGatewayId86251C09:
+    Value:
+      Ref: TheVPCVpnGateway97BC18B3
     Export:
       Name: Vpc:TheVPCVpnGatewayId86251C09
